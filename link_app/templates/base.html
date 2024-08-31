@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {% comment %} <link href="{% static 'css/book_aggregator.css' %}" rel="stylesheet"> {% endcomment %}
+
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+    <body style="background-color: #f6f6f6;">
+    {% block content %}{% endblock content %}
+    </body>
+</html>
