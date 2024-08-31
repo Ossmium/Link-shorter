@@ -9,8 +9,12 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import django
+import string
 from pathlib import Path
+
+import django.utils
+import django.utils.crypto
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,14 +26,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-&bn^%21prmfh#e*2uz5kokm7vmc*3ywz16bz8wvny9rqjcy$ur'
 
-DOMAIN = 'localhost/'
-SYMBOLS = 'ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz234567890'
+SYMBOLS = string.ascii_letters + string.digits
 URL_LENGTH = 6
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
 
 
 # Application definition
@@ -42,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'link_app',
+    'accounts',
     'django_bootstrap5',
 ]
 

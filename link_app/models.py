@@ -5,7 +5,8 @@ import random
 
 
 class Link(models.Model):
-    full_url = models.URLField(unique=True, verbose_name='Полный URL')
+    full_url = models.CharField(
+        unique=True, max_length=2048, verbose_name='Полный URL')
     short_url = models.CharField(
         max_length=settings.URL_LENGTH,
         unique=True,
@@ -14,11 +15,18 @@ class Link(models.Model):
         verbose_name='Короткий URL'
     )
     click_count = models.IntegerField(
-        default=0, verbose_name='Количество кликов')
+        default=0,
+        verbose_name='Количество кликов'
+    )
     created_at = models.DateTimeField(
-        auto_now=True, verbose_name='Дата создания')
+        auto_now=True,
+        verbose_name='Дата создания'
+    )
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name='Пользователь')
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь'
+    )
 
     def save(self):
         if not self.short_url:
