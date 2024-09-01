@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Ссылки{% endblock %}
+{% block content %}
+{% load fullurl %}
+{% load static %}
+<form action="{% url 'link_app:urls_list' %}" method="POST" class="ms-3 me-3 mb-3" id="urlCreate">
+    {% csrf_token %}
+    <div>
+        <label for="full_url" class="form-label">Введите ссылку</label>
+        <div class="d-flex flex-row">
+            {{ form.full_url }}
+            <input id="create_url" data-url="{% url 'link_app:urls_list' %}" type="submit" class="btn btn-outline-primary ms-1" value="Создать">
+        </div>
+    </div>
+</form>
+{{ errors }}
+<table class="table" id="urls">
+    <thead>
+        <tr>
+            <th scope="col">Полная ссылка</th>
+            <th scope="col">Короткая ссылка</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for url in urls %}
+            <tr>
+                <td>
+                    <a href="{{ url }}">{{ url }}</a>
+                </td>
+                <td>
+                    <a href="{% url 'link_app:url_detail' url.short_url %}">{% fullurl 'link_app:url_detail' url.short_url %}</a>
+                </td>
+                <td>
+                    <input id="delete_url{{ url.id }}" onClick="delete_url({{ url.id }})" type="submit" data-url="{% url 'link_app:url_delete' url.id %}" class="btn btn-sm btn-outline-danger" value="Удалить">
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script>
+    var csrfToken = "{{ csrf_token }}";
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'js/create_url.js' %}"></script>
+<script src="{% static 'js/delete_url.js' %}"></script>
+{% endblock %}

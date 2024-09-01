@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %} Пользователи {% endblock %}
 {% block content %}
     <style>
@@ -9,43 +10,22 @@
             display: block;
         }
     </style>
-    <div class="container mt-5">
+    <div id="usersList" class="container mt-5">
         {% for user in users %}
-        <ul class="list-group">
-            <li class="list-group-item user-item" data-user-id="{{ user.id }}" style="cursor: pointer;">{{ user }}</li>
+            <ul class="list-group">
+                <li id="list-group_{{ user.id }}" class="list-group-item user-item d-flex justify-content-between" data-user-id="{{ user.id }}" style="cursor: pointer;"  onClick="load_users_urls({{ user.id }})">
+                    <span>{{ user }}</span>
+                    <input id="delete_user_{{ user.id }}" onClick="delete_user({{ user.id }})" type="submit" data-url="{% url 'accounts:users_delete' user.id %}" class="btn btn-sm btn-outline-danger" value="Удалить">
+                </li>
+            </ul>
             <ul class="list-group collapse links-list" id="links-{{ user.id }}"></ul>
         {% endfor %}
     </div>
-    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const userItems = document.querySelectorAll('.list-group-item.user-item');
-
-            userItems.forEach(userItem => {
-                userItem.addEventListener('click', function() {
-                    const userId = this.getAttribute('data-user-id');
-                    const linksList = document.getElementById('links-' + userId);
-
-                    if (linksList.classList.contains('show')) {
-                        linksList.classList.remove('show');
-                    } else if (linksList.childElementCount > 0) {
-                        linksList.classList.add('show');
-                    } else {
-                        fetch(`/user/${userId}/links/`)
-                            .then(response => response.json())
-                            .then(data => {
-                                data.links.forEach(link => {
-                                    const linkItem = document.createElement('a');
-                                    linkItem.href = "{% url 'link_app:url_detail' 'PLACEHOLDER' %}".replace('PLACEHOLDER', link.short_url);
-                                    linkItem.textContent = link.short_url;
-                                    linkItem.classList.add('list-group-item');
-                                    linksList.appendChild(linkItem);
-                                });
-                                linksList.classList.add('show');
-                            });
-                    }
-                });
-            });
-        });
+        var csrfToken = "{{ csrf_token }}";
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'js/delete_user_url.js' %}"></script>
+    <script src="{% static 'js/delete_user.js' %}"></script>
+    <script src="{% static 'js/load_users_urls.js' %}"></script>
 {% endblock %}

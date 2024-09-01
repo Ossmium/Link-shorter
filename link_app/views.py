@@ -16,7 +16,10 @@ class ListCreateURLView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["urls"] = Link.objects.all()
+        if self.request.user.is_superuser:
+            context["urls"] = Link.objects.all()
+        else:
+            context["urls"] = Link.objects.user_links(self.request.user)
         return context
 
     def form_valid(self, form):
@@ -26,5 +29,4 @@ class ListCreateURLView(CreateView):
 
 class DeleteURLView(DeleteView):
     model = Link
-    template_name = 'link_app/urls_list.html'
     success_url = reverse_lazy('link_app:urls_list')

@@ -10,7 +10,8 @@ $(document).ready(function () {
                 let html = await (await fetch(location.href)).text();
                 let newdoc = new DOMParser().parseFromString(html, 'text/html');
                 document.getElementById('urls').outerHTML = newdoc.querySelector('#urls').outerHTML;
-                document.getElementById('id_full_url').value = '';
+                document.getElementById('urls').outerHTML = newdoc.querySelector('#urls').outerHTML;
+                document.getElementById('full_url').value = '';
             },
             error: function (response) {
                 alert(response.responseJSON.errors);

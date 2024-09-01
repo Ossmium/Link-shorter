@@ -7,7 +7,59 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 </head>
-    <body style="background-color: #f6f6f6;">
-    {% block content %}{% endblock content %}
+    <body style="background-color: #f6f6f6; margin-left: 15rem; margin-right: 15rem; padding-left: 0; padding-right: 0;">
+        <nav class="d-flex flex-row align-items-center navbar navbar-expand-lg navbar-light bg-light navigation" style="background-color: #f6f6f6;">
+            <div class="container-fluid" style="">
+                <a class="navbar-brand" href="/" style="font-size: 28px; font-weight: 500;">LinkShorter</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="me-2">
+                    {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <div class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ user.username }}
+                                <img class="ms-2 rounded" src="{{ user.profile.avatar.url }} " style="max-height: 30px; max-width: 30px;"/>
+                            </div> 
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" id="dropdown-menu">
+                            <li><a id="userLinks" class="dropdown-item" href="{% url 'accounts:users_urls' %}">Ваши ссылки</a></li>
+                            {% if user.is_superuser %}  
+                              <li><a id="user_links" class="dropdown-item" href="{% url 'accounts:users' %}">Пользователи</a></li>
+                              <li><a id="user_links" class="dropdown-item" href="{% url 'link_app:urls_list' %}">Ссылки</a></li>
+                              <li><hr class="dropdown-divider"></li>
+                            {% endif %}
+                            <li>
+                            <form action="{% url 'logout' %}" method="post">
+                                {% csrf_token %}
+                                <a class="dropdown-item" href="#" onclick="parentNode.submit();">
+                                    Выйти
+                                </a>
+                            </form>
+                          </li>
+                        </ul>
+                      </div>
+                    {% else %}
+                      <div class="dropdown">
+                        <div class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="11" r="3.25" stroke="#020305" stroke-width="1.5"></circle><path d="M6.5 19.318C7.84208 18.0095 9.50575 17 12 17C14.4943 17 16.1579 18.0095 17.5 19.318" stroke="#020305" stroke-width="1.5"></path><rect x="3" y="3" width="18" height="18" rx="9" stroke="#020305" stroke-width="1.5"></rect></svg>
+                        </div> 
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                          <li>
+                            <form action="{% url 'login' %}" method="post">
+                              {% csrf_token %}
+                              <a class="dropdown-item" href="{% url 'login' %}">
+                                Войти
+                              </a>
+                            </form>
+                          </li>
+                        </ul>
+                      </div>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    <div id="content">
+      {% block content %}{% endblock content %}
+    </div>
     </body>
 </html>

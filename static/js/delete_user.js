@@ -1,7 +1,8 @@
-function delete_url(urlId) {
-    const delete_url_button = document.getElementById('delete_url' + urlId);
+function delete_user(userId) {
+    const delete_user_button = document.getElementById('delete_user_' + userId);
+    console.log(delete_user_button.dataset.url)
     $.ajax({
-        url: delete_url_button.dataset.url,
+        url: delete_user_button.dataset.url,
         type: 'POST',
         data: {
             csrfmiddlewaretoken: csrfToken,
@@ -10,9 +11,7 @@ function delete_url(urlId) {
         success: async function (response) {
             let html = await (await fetch(location.href)).text();
             let newdoc = new DOMParser().parseFromString(html, 'text/html');
-            document.getElementById('urls').outerHTML = newdoc.querySelector('#urls').outerHTML;
-            document.getElementById('usersList').outerHTML = newdoc.querySelector('#usersList').outerHTML;
-            document.getElementById('full_url').value = '';
+            document.getElementById('users').outerHTML = newdoc.querySelector('#users').outerHTML;
         },
         error: function (response) {
             alert(response.responseJSON.errors);

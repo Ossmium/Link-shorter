@@ -8,6 +8,9 @@ from django.contrib.auth.views import LoginView
 from accounts.forms import SignUpForm, LoginForm
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic.edit import DeleteView
+from link_app.models import Link
+from link_app.forms import URLForm
 
 
 class CustomLoginView(LoginView):
@@ -46,10 +49,18 @@ class SignUpView(CreateView):
         return super(SignUpView, self).dispatch(request, *args, **kwargs)
 
 
-class UsersListView(ListView):
+class UserDeleteView(DeleteView):
+    model = User
+    success_url = reverse_lazy('accounts:users')
+
+
+class UsersListView(UserPassesTestMixin, ListView):
     queryset = User.objects.all()
     template_name = 'accounts/users.html'
     context_object_name = 'users'
+
+    def test_func(self):
+        return self.request.user.is_superuser
 
 
 class UserCreateView(UserPassesTestMixin, CreateView):
@@ -61,8 +72,33 @@ class UserCreateView(UserPassesTestMixin, CreateView):
         return self.request.user.is_superuser
 
 
+class UserLinksView(CreateView):
+    form_class = URLForm
+    template_name = 'accounts/user_links.html'
+    success_url = reverse_lazy('accounts:users_urls')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['urls'] = Link.objects.user_links(self.request.user)
+        return context
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
 def user_links(request, user_id):
     user = get_object_or_404(User, id=user_id)
     links = user.links.all()
-    links_data = [{'short_url': link.short_url} for link in links]
+    links_data = [
+        {
+            'id': link.id,
+            'full_url': link.full_url,
+            'short_url': link.short_url,
+            'click_count': link.click_count,
+            'created_at': link.created_at,
+            'user': link.user.username,
+        }
+        for link in links
+    ]
     return JsonResponse({'links': links_data})

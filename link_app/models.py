@@ -4,11 +4,15 @@ from django.conf import settings
 import random
 
 
+class UserLinks(models.QuerySet):
+    def user_links(self, user):
+        return self.filter(user=user)
+
+
 class Link(models.Model):
-    full_url = models.CharField(
-        unique=True,
+    full_url = models.URLField(
         max_length=2048,
-        verbose_name='Полный URL'
+        verbose_name='Полный URL',
     )
     short_url = models.CharField(
         max_length=settings.URL_LENGTH,
@@ -31,8 +35,12 @@ class Link(models.Model):
         related_name='links',
         verbose_name='Пользователь'
     )
+    objects = UserLinks.as_manager()
 
     def save(self):
+        if Link.objects.filter(full_url=self.full_url, user=self.user):
+            raise ValueError('Вы уже добавляли данную ссылку')
+
         if not self.short_url:
             while True:
                 self.short_url = ''.join(
