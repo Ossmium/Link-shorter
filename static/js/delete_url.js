@@ -1,11 +1,11 @@
 function delete_url(urlId) {
     const delete_url_button = document.getElementById('delete_url' + urlId);
-        
+    console.log(delete_url_button.dataset.url)
     $.ajax({
         url: delete_url_button.dataset.url,
         type: 'POST',
         data: {
-            csrfmiddlewaretoken: csrfToken,  // Использование переменной с CSRF-токеном
+            csrfmiddlewaretoken: csrfToken,
         },
 
         success: async function (response) {
