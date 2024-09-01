@@ -1,9 +1,13 @@
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
-from accounts.forms import SignUpForm, LoginForm
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.contrib import messages
+from django.urls import reverse_lazy
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic.list import ListView
 from django.contrib.auth.views import LoginView
+from accounts.forms import SignUpForm, LoginForm
+from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 class CustomLoginView(LoginView):
@@ -40,3 +44,25 @@ class SignUpView(CreateView):
         if request.user.is_authenticated:
             return redirect(to='/')
         return super(SignUpView, self).dispatch(request, *args, **kwargs)
+
+
+class UsersListView(ListView):
+    queryset = User.objects.all()
+    template_name = 'accounts/users.html'
+    context_object_name = 'users'
+
+
+class UserCreateView(UserPassesTestMixin, CreateView):
+    form_class = SignUpForm
+    success_url = reverse_lazy('accounts:users')
+    template_name = 'accounts/users_create.html'
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+def user_links(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    links = user.links.all()
+    links_data = [{'short_url': link.short_url} for link in links]
+    return JsonResponse({'links': links_data})

@@ -6,7 +6,10 @@ import random
 
 class Link(models.Model):
     full_url = models.CharField(
-        unique=True, max_length=2048, verbose_name='Полный URL')
+        unique=True,
+        max_length=2048,
+        verbose_name='Полный URL'
+    )
     short_url = models.CharField(
         max_length=settings.URL_LENGTH,
         unique=True,
@@ -25,6 +28,7 @@ class Link(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name='links',
         verbose_name='Пользователь'
     )
 
