@@ -12,6 +12,8 @@ from django.views.generic.edit import DeleteView
 from link_app.models import Link
 from link_app.forms import URLForm
 
+from datetime import datetime
+
 
 class CustomLoginView(LoginView):
     form_class = LoginForm
@@ -96,7 +98,7 @@ def user_links(request, user_id):
             'full_url': link.full_url,
             'short_url': link.short_url,
             'click_count': link.click_count,
-            'created_at': link.created_at,
+            'created_at': link.created_at.strftime("%d-%m-%Y %H:%M:%S"),
             'user': link.user.username,
         }
         for link in links

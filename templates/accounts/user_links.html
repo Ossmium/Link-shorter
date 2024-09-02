@@ -3,13 +3,13 @@
 {% block content %}
 {% load fullurl %}
 {% load static %}
-<form action="{% url 'link_app:urls_list' %}" method="POST" class="ms-3 me-3 mb-3" id="urlCreate">
+<form action="{% url 'accounts:users_urls' %}" method="POST" class="mb-3" id="urlCreate">
     {% csrf_token %}
     <div>
         <label for="full_url" class="form-label">Введите ссылку</label>
         <div class="d-flex flex-row">
             {{ form.full_url }}
-            <input id="create_url" data-url="{% url 'link_app:urls_list' %}" type="submit" class="btn btn-outline-primary ms-1" value="Создать">
+            <input id="create_url" data-url="{% url 'accounts:users_urls' %}" type="submit" class="btn btn-outline-primary ms-1" value="Создать">
         </div>
     </div>
 </form>

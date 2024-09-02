@@ -1,15 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
-    {% comment %} <link href="{% static 'css/book_aggregator.css' %}" rel="stylesheet"> {% endcomment %}
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 </head>
-    <body style="background-color: #f6f6f6; margin-left: 15rem; margin-right: 15rem; padding-left: 0; padding-right: 0;">
-        <nav class="d-flex flex-row align-items-center navbar navbar-expand-lg navbar-light bg-light navigation" style="background-color: #f6f6f6;">
-            <div class="container-fluid" style="">
+    <body>
+        <nav class="d-flex flex-row align-items-center navbar navbar-expand-lg navigation navigation-bar">
+            <div class="container-fluid">
                 <a class="navbar-brand" href="/" style="font-size: 28px; font-weight: 500;">LinkShorter</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -25,7 +26,6 @@
                             <li><a id="userLinks" class="dropdown-item" href="{% url 'accounts:users_urls' %}">Ваши ссылки</a></li>
                             {% if user.is_superuser %}  
                               <li><a id="user_links" class="dropdown-item" href="{% url 'accounts:users' %}">Пользователи</a></li>
-                              <li><a id="user_links" class="dropdown-item" href="{% url 'link_app:urls_list' %}">Ссылки</a></li>
                               <li><hr class="dropdown-divider"></li>
                             {% endif %}
                             <li>
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </nav>
-    <div id="content">
+    <div id="content" class="p-4">
       {% block content %}{% endblock content %}
     </div>
     </body>

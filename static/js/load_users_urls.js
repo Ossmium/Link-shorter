@@ -1,13 +1,15 @@
 function load_users_urls(userId) {
+    const URL = 'http://127.0.0.1:8000/urls/'
     const userItem = document.getElementById('list-group_' + userId);
     const userIdatt = userItem.getAttribute('data-user-id');
-    console.log(userIdatt)
-    const linksList = document.getElementById('links-' + userIdatt);
+    const linksList = document.getElementById('links-' + userIdatt).querySelector('tbody');
 
-    if (linksList.classList.contains('show')) {
-        linksList.classList.remove('show');
+    const tableContainer = document.getElementById('links-' + userIdatt);
+
+    if (tableContainer.classList.contains('show')) {
+        tableContainer.classList.remove('show');
     } else if (linksList.childElementCount > 0) {
-        linksList.classList.add('show');
+        tableContainer.classList.add('show');
     } else {
         fetch(`/users/${userId}/links/`)
             .then(response => response.json())
@@ -19,15 +21,25 @@ function load_users_urls(userId) {
 
                     const urlTd = document.createElement('td');
                     const urlAnchor = document.createElement('a');
-                    urlAnchor.href = link.full_url;  // Предполагается, что структура данных имеет поле link.url
+                    urlAnchor.href = link.full_url;
                     urlAnchor.textContent = link.full_url;
                     urlTd.appendChild(urlAnchor);
 
                     const shortUrlTd = document.createElement('td');
                     const shortUrlAnchor = document.createElement('a');
                     shortUrlAnchor.href = `/urls/${link.short_url}/`;
-                    shortUrlAnchor.textContent = link.short_url;
+                    shortUrlAnchor.textContent = URL + link.short_url;
                     shortUrlTd.appendChild(shortUrlAnchor);
+                    
+                    const clickCount = document.createElement('td');
+                    const clickCountSpan = document.createElement('span');
+                    clickCountSpan.textContent = link.click_count;
+                    clickCount.appendChild(clickCountSpan);
+
+                    const createdAt = document.createElement('td');
+                    const createdAtSpan = document.createElement('span');
+                    createdAtSpan.textContent = link.created_at;
+                    createdAt.appendChild(createdAtSpan);
 
                     const deleteTd = document.createElement('td');
                     const deleteButton = document.createElement('input');
@@ -43,18 +55,14 @@ function load_users_urls(userId) {
 
                     linkRow.appendChild(urlTd);
                     linkRow.appendChild(shortUrlTd);
+                    linkRow.appendChild(clickCount);
+                    linkRow.appendChild(createdAt)
                     linkRow.appendChild(deleteTd);
 
                     linksList.appendChild(linkRow);
                     counter += 1;
-
-                    // const linkItem = document.createElement('a');
-                    // linkItem.href = `/urls/${link.short_url}/`;
-                    // linkItem.textContent = link.short_url;
-                    // linkItem.classList.add('list-group-item');
-                    // linksList.appendChild(linkItem);
                 });
-                linksList.classList.add('show');
+                tableContainer.classList.add('show');
             });
     }
 }

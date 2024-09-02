@@ -18,7 +18,19 @@
                     <input id="delete_user_{{ user.id }}" onClick="delete_user({{ user.id }})" type="submit" data-url="{% url 'accounts:users_delete' user.id %}" class="btn btn-sm btn-outline-danger" value="Удалить">
                 </li>
             </ul>
-            <ul class="list-group collapse links-list" id="links-{{ user.id }}"></ul>
+
+            <table class="table collapse links-list mb-0" id="links-{{ user.id }}">
+                <thead>
+                    <tr>
+                        <th>Полный URL</th>
+                        <th>Короткий URL</th>
+                        <th>Количество кликов</th>
+                        <th>Дата создания</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         {% endfor %}
     </div>
     <script>
