@@ -1,3 +1,9 @@
 from django.test import TestCase
+from link_app.models import Link
 
-# Create your tests here.
+
+def test_link_create():
+    url = 'http://ya.ru'
+    Link.objects.create(
+        url
+    )
