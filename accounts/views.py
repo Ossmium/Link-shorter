@@ -7,12 +7,11 @@ from django.views.generic.list import ListView
 from django.contrib.auth.views import LoginView
 from accounts.forms import SignUpForm, LoginForm
 from django.views.generic.edit import CreateView
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views.generic.edit import DeleteView
 from link_app.models import Link
 from link_app.forms import URLForm
-
-from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
 
 class CustomLoginView(LoginView):
@@ -51,12 +50,15 @@ class SignUpView(CreateView):
         return super(SignUpView, self).dispatch(request, *args, **kwargs)
 
 
-class UserDeleteView(DeleteView):
+class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = User
     success_url = reverse_lazy('accounts:users')
 
+    def test_func(self):
+        return self.request.user.is_superuser
 
-class UsersListView(UserPassesTestMixin, ListView):
+
+class UsersListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     queryset = User.objects.all()
     template_name = 'accounts/users.html'
     context_object_name = 'users'
@@ -65,7 +67,7 @@ class UsersListView(UserPassesTestMixin, ListView):
         return self.request.user.is_superuser
 
 
-class UserCreateView(UserPassesTestMixin, CreateView):
+class UserCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     form_class = SignUpForm
     success_url = reverse_lazy('accounts:users')
     template_name = 'accounts/users_create.html'
@@ -74,7 +76,8 @@ class UserCreateView(UserPassesTestMixin, CreateView):
         return self.request.user.is_superuser
 
 
-class UserLinksView(CreateView):
+class UserLinksView(LoginRequiredMixin, CreateView):
+    login_url = '/login/'
     form_class = URLForm
     template_name = 'accounts/user_links.html'
     success_url = reverse_lazy('accounts:users_urls')
@@ -89,6 +92,7 @@ class UserLinksView(CreateView):
         return super().form_valid(form)
 
 
+@login_required(login_url='/login/')
 def user_links(request, user_id):
     user = get_object_or_404(User, id=user_id)
     links = user.links.all()

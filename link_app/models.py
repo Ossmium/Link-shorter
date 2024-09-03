@@ -37,10 +37,7 @@ class Link(models.Model):
     )
     objects = UserLinks.as_manager()
 
-    def save(self):
-        if Link.objects.filter(full_url=self.full_url, user=self.user):
-            raise ValueError('Вы уже добавляли данную ссылку')
-
+    def create_short_url(self):
         if not self.short_url:
             while True:
                 self.short_url = ''.join(
@@ -51,6 +48,13 @@ class Link(models.Model):
                 )
                 if not Link.objects.filter(short_url=self.short_url).exists():
                     break
+
+    def save(self):
+        if Link.objects.filter(full_url=self.full_url, user=self.user):
+            raise ValueError('Вы уже добавляли данную ссылку')
+
+        self.create_short_url()
+
         super().save()
 
     def __str__(self) -> str:
