@@ -7,7 +7,7 @@
 Для запуска нужно использовать Docker, также создать файл .env в корне проекта:
 1) Написать .env по примеру файла .env_example (можно переименовать .env_example в .env, тогда можно пропустить следующий шаг)
 2) В docker-compose.yml в блоке db в environment изменить значения переменных POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB на значения из файла .env
-3) В терминале ввести команду ```docker-compose up --build```
+3) В терминале ввести команду ```docker-compose up -d --build```
 4) Перейти по адресу http://localhost:8000
 После этого можно пользоваться сервисом.
 ### Как использовать
