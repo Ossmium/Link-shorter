@@ -19,6 +19,8 @@
         <tr>
             <th scope="col">Полная ссылка</th>
             <th scope="col">Короткая ссылка</th>
+            <th scope="col">Количество кликов</th>
+            <th scope="col">Дата создания</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -30,6 +32,12 @@
                 </td>
                 <td>
                     <a href="{% url 'link_app:url_detail' url.short_url %}">{% fullurl 'link_app:url_detail' url.short_url %}</a>
+                </td>
+                <td>
+                    <span>{{ url.click_count }}</span>
+                </td>
+                <td>
+                    <span>{{ url.created_at }}</span>
                 </td>
                 <td>
                     <input id="delete_url{{ url.id }}" onClick="delete_url({{ url.id }})" type="submit" data-url="{% url 'link_app:url_delete' url.id %}" class="btn btn-sm btn-outline-danger" value="Удалить">
