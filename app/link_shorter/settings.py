@@ -88,28 +88,16 @@ WSGI_APPLICATION = "link_shorter.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": os.environ["DB_ENGINE"],
-#         "NAME": os.environ["DB_NAME"],
-#         "USER": os.environ["DB_USER"],
-#         "PASSWORD": os.environ["PASSWORD"],
-#         "HOST": os.environ["DB_HOST"],
-#         "PORT": os.environ["PORT"],
-#     }
-# }
-
 DATABASES = {
     "default": {
         "ENGINE": os.environ["DB_ENGINE"],
         "NAME": os.environ["DB_NAME"],
         "USER": os.environ["DB_USER"],
         "PASSWORD": os.environ["PASSWORD"],
-        "HOST": "localhost",
+        "HOST": os.environ["DB_HOST"],
         "PORT": os.environ["PORT"],
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
