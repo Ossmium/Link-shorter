@@ -89,13 +89,13 @@ WSGI_APPLICATION = "link_shorter.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ['DB_NAME'],
-#         'USER': os.environ['DB_USER'],
-#         'PASSWORD': os.environ['PASSWORD'],
-#         'HOST': os.environ['HOST'],
-#         'PORT': os.environ['PORT'],
+#     "default": {
+#         "ENGINE": os.environ["DB_ENGINE"],
+#         "NAME": os.environ["DB_NAME"],
+#         "USER": os.environ["DB_USER"],
+#         "PASSWORD": os.environ["PASSWORD"],
+#         "HOST": os.environ["DB_HOST"],
+#         "PORT": os.environ["PORT"],
 #     }
 # }
 

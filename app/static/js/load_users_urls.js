@@ -53,7 +53,7 @@ async function load_users_urls(userId) {
                     deleteButton.id = `delete_url${link.id}`;
                     deleteButton.dataset.url = `/urls/delete/` + link.id + "/";
                     deleteButton.onclick = function() {
-                        delete_user_url(link.id, linkRow.id, userId, linksLength);
+                        delete_user_url(link.id, linkRow.id, user, linksLength);
                         linksLength -= 1
                     };
                     deleteTd.appendChild(deleteButton);
