@@ -15,6 +15,7 @@ function delete_user_url(urlId, linkRowId, userId, linksLength) {
             csrfmiddlewaretoken: csrfToken,
         },
         success: function (response) {
+            linksLength -= 1
             linkItem.remove();
             if (!linksLength && tableContainer) {
                 tableContainer.classList.remove('show');

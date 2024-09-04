@@ -20,6 +20,7 @@ function load_users_urls(userId) {
                 if (!linksLength) {
                     return
                 }
+                
                 data.links.forEach(link => {
                     const linkRow = document.createElement('tr');
                     linkRow.id = `link-${link.id}`
@@ -54,7 +55,6 @@ function load_users_urls(userId) {
                     deleteButton.id = `delete_url${link.id}`;;
                     deleteButton.dataset.url = `/urls/delete/` + link.id + "/";
                     deleteButton.onclick = function() {
-                        linksLength -= 1
                         delete_user_url(link.id, linkRow.id, userId, linksLength);
                     };
                     deleteTd.appendChild(deleteButton);
