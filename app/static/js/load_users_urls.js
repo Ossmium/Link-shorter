@@ -1,27 +1,28 @@
-async function load_users_urls(userId) {
-    const URL = 'http://localhost:8000/urls/'
-    const linksList = document.getElementById('links-' + userId).querySelector('tbody');
+function load_users_urls(userId) {
+    const URL = 'http://127.0.0.1:8000/urls/'
+    const userItem = document.getElementById('list-group_' + userId);
+    const userIdatt = userItem.getAttribute('data-user-id');
+    const linksList = document.getElementById('links-' + userIdatt).querySelector('tbody');
 
-    const tableContainer = document.getElementById('links-' + userId);
-    let linksLength;
+    const tableContainer = document.getElementById('links-' + userIdatt);
+    let counter = 1;
 
     if (tableContainer.classList.contains('show')) {
         tableContainer.classList.remove('show');
     } else if (linksList.childElementCount > 0) {
         tableContainer.classList.add('show');
     } else {
-        let flag = false
-        await fetch(`/users/${userId}/links/`)
+        fetch(`/users/${userId}/links/`)
             .then(response => response.json())
             .then(data => {
-                linksLength = data.links.length
+                let linksLength = data.links.length
+
                 if (!linksLength) {
                     return
                 }
-                let counter = 1;
                 data.links.forEach(link => {
                     const linkRow = document.createElement('tr');
-                    linkRow.id = (`link-${counter}`)
+                    linkRow.id = `link-${link.id}`
 
                     const urlTd = document.createElement('td');
                     const urlAnchor = document.createElement('a');
@@ -50,11 +51,11 @@ async function load_users_urls(userId) {
                     deleteButton.type = 'submit';
                     deleteButton.classList.add('btn', 'btn-sm', 'btn-outline-danger');
                     deleteButton.value = 'Удалить';
-                    deleteButton.id = `delete_url${link.id}`;
+                    deleteButton.id = `delete_url${link.id}`;;
                     deleteButton.dataset.url = `/urls/delete/` + link.id + "/";
                     deleteButton.onclick = function() {
-                        delete_user_url(link.id, linkRow.id, user, linksLength);
                         linksLength -= 1
+                        delete_user_url(link.id, linkRow.id, userId, linksLength);
                     };
                     deleteTd.appendChild(deleteButton);
 
@@ -66,7 +67,6 @@ async function load_users_urls(userId) {
 
                     linksList.appendChild(linkRow);
                     counter += 1;
-                    flag = true
                 });
                 tableContainer.classList.add('show');
             });

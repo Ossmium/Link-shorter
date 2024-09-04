@@ -6,17 +6,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def index(request):
-    return render(request, 'link_app/index.html')
+    return render(request, "link_app/index.html")
 
 
 class DeleteURLView(LoginRequiredMixin, DeleteView):
     model = Link
-    success_url = reverse_lazy('accounts:users_urls')
+    success_url = reverse_lazy("accounts:users_urls")
 
     http_method_names = [
         "post",
     ]
 
     def post(self, request, *args, **kwargs):
-        get_object_or_404(request.user.links.all(), **kwargs)
+        if not (request.user.is_staff or request.user.is_superuser):
+            get_object_or_404(request.user.links.all(), **kwargs)
         return super().post(request, *args, **kwargs)
