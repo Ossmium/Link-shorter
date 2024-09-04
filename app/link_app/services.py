@@ -6,10 +6,10 @@ from django.core.cache import cache
 
 def get_full_url(url):
     if link := Link.objects.filter(short_url=url):
-        link.filter().update(click_count=F('click_count') + 1)
+        link.filter().update(click_count=F("click_count") + 1)
         cache.set(link[0].short_url, link[0].full_url, timeout=300)
         return link[0]
-    raise KeyError('Данный URL не существует, попробуйте другой')
+    raise KeyError("Данный URL не существует, попробуйте другой")
 
 
 def redirection(request, url):

@@ -5,7 +5,12 @@ from django.contrib.auth.models import User
 
 def test_user_cant_delete_another_user(db, user_client, superuser):
     response = user_client.post(
-        reverse("accounts:users_delete", kwargs={"pk": superuser.id})
+        reverse(
+            "accounts:users_delete",
+            kwargs={
+                "pk": superuser.id,
+            },
+        )
     )
 
     assert response.status_code == HTTPStatus.FORBIDDEN
@@ -17,9 +22,9 @@ def test_user_cant_create_another_user(db, user_client):
         reverse("accounts:users_create"),
         data={
             "username": ["test_user"],
-            "email": ["popovkd53@gmail.com"],
-            "password1": ["MCXIEBa100"],
-            "password2": ["MCXIEBa100"],
+            "email": ["test@test.ru"],
+            "password1": ["test_pass123"],
+            "password2": ["test_pass123"],
         },
     )
 
