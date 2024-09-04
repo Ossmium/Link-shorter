@@ -1,31 +1,59 @@
 {% extends "base.html" %}
-{% block title %}Link shorter{% endblock %}
+{% block title %}Ссылки{% endblock %}
 {% block content %}
 {% load fullurl %}
 {% load static %}
-    <div class="d-flex flex-column" id="urls" >
-        {% for url in urls %}
-            <div class="d-flex flex-row align-items-center">
-                <a href="{{ url }}" class="ms-5 me-5">{{ url }}</a>
-                <a href="{% url 'link_app:url_detail' url.short_url %}" class="ms-5 me-5">{% fullurl 'link_app:url_detail' url.short_url %}</a>
-                <div class="ms-5 me-5">{{ url.click_count }}</div>
-                <div class="ms-5 me-5">{{ url.created_at }}</div>
-                <div class="ms-5 me-5">{{ url.user }}</div>
-                <input id="delete_url{{ url.id }}" onClick="delete_url({{ url.id }})" type="submit" data-url="{% url 'link_app:url_delete' url.id %}" class="btn btn-sm btn-outline-danger mb-3 mt-2" value="Удалить">
-            </div>
-        {% endfor %}
-    </div>
-    <form action="{% url 'link_app:urls_list' %}" method="POST" class="ms-5 me-5" id="urlCreate">
-        {% csrf_token %}
+<form action="{% url 'accounts:users_urls' %}" method="POST" class="mb-3" id="urlCreate">
+    {% csrf_token %}
+    <div>
+        <label for="full_url" class="form-label">Введите ссылку</label>
         <div class="d-flex flex-row">
             {{ form.full_url }}
-            <input id="create_url" data-url="{% url 'link_app:urls_list' %}" type="submit" class="btn btn-outline-primary mb-3 mt-2" value="Создать">
+            <input id="create_url" data-url="{% url 'accounts:users_urls' %}" type="submit" class="btn btn-outline-primary ms-1" value="Создать">
         </div>
-    </form>
-    <script>
-        var csrfToken = "{{ csrf_token }}";
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="{% static 'js/create_url.js' %}"></script>
-    <script src="{% static 'js/delete_url.js' %}"></script>
+    </div>
+</form>
+{{ errors }}
+<table class="table" id="urls">
+    <thead>
+        <tr>
+            <th scope="col">Полная ссылка</th>
+            <th scope="col">Короткая ссылка</th>
+            <th scope="col">Количество кликов</th>
+            <th scope="col">Дата создания</th>
+            <th scope="col">Пользователь</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for url in urls %}
+            <tr>
+                <td>
+                    <a href="{{ url }}">{{ url }}</a>
+                </td>
+                <td>
+                    <a href="{% url 'link_app:url_detail' url.short_url %}">{% fullurl 'link_app:url_detail' url.short_url %}</a>
+                </td>
+                <td>
+                    <span>{{ url.click_count }}</span>
+                </td>
+                <td>
+                    <span>{{ url.created_at }}</span>
+                </td>
+                <td>
+                    <span>{{ url.user }}</span>
+                </td>
+                <td>
+                    <input id="delete_url{{ url.id }}" onClick="delete_url({{ url.id }})" type="submit" data-url="{% url 'link_app:url_delete' url.id %}" class="btn btn-sm btn-outline-danger" value="Удалить">
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script>
+    var csrfToken = "{{ csrf_token }}";
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'js/create_url.js' %}"></script>
+<script src="{% static 'js/delete_url.js' %}"></script>
 {% endblock %}

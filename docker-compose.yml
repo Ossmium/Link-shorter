@@ -17,13 +17,14 @@ services:
     volumes:
       - ./postgres_data:/var/lib/postgresql/datastore
     environment:
-      - POSTGRES_USER=link_shorter
-      - POSTGRES_PASSWORD=MCXIEBp100
-      - POSTGRES_DB=link_shorter
+      - POSTGRES_USER=database_user
+      - POSTGRES_PASSWORD=user_password
+      - POSTGRES_DB=database_name
   redis:
     image: redis:latest
     container_name: redis
     ports:
       - 6379:6379
+
 volumes:
   postgres_data:

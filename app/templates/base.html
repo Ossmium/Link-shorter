@@ -26,6 +26,7 @@
                             <li><a id="userLinks" class="dropdown-item" href="{% url 'accounts:users_urls' %}">Ваши ссылки</a></li>
                             {% if user.is_superuser %}  
                               <li><a id="user_links" class="dropdown-item" href="{% url 'accounts:users' %}">Пользователи</a></li>
+                              <li><a id="user_links" class="dropdown-item" href="{% url 'link_app:urls' %}">Ссылки</a></li>
                               <li><hr class="dropdown-divider"></li>
                             {% endif %}
                             <li>
