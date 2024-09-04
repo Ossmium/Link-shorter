@@ -1,5 +1,5 @@
 from .models import Link
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic.edit import DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,11 +18,5 @@ class DeleteURLView(LoginRequiredMixin, DeleteView):
     ]
 
     def post(self, request, *args, **kwargs):
-        link = None
-        try:
-            link = Link.objects.get(**kwargs)
-        except Link.DoesNotExist:
-            raise ValueError('Данная ссылка не существует')
-        if not link in request.user.links.all():
-            raise ValueError('Данная ссылка не существует')
+        get_object_or_404(request.user.links.all(), **kwargs)
         return super().post(request, *args, **kwargs)

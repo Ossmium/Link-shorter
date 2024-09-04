@@ -11,7 +11,6 @@ function delete_url(urlId) {
             let html = await (await fetch(location.href)).text();
             let newdoc = new DOMParser().parseFromString(html, 'text/html');
             document.getElementById('urls').outerHTML = newdoc.querySelector('#urls').outerHTML;
-            document.getElementById('usersList').outerHTML = newdoc.querySelector('#usersList').outerHTML;
             document.getElementById('full_url').value = '';
         },
         error: function (response) {

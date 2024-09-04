@@ -10,14 +10,17 @@
             display: block;
         }
     </style>
+    <div class="d-flex justify-content-center">
+        <a href="{% url 'accounts:users_create' %}" class="btn btn-sm btn-outline-primary">Создать пользователя</a>
+    </div>
     <div id="usersList" class="container mt-5">
         {% for user in users %}
             <ul class="list-group">
-                <li id="list-group_{{ user.id }}" class="list-group-item user-item d-flex justify-content-between" data-user-id="{{ user.id }}" style="cursor: pointer;"  onClick="load_users_urls({{ user.id }})">
+                <li id="list-group_{{ user.id }}" class="list-group-item user-item d-flex justify-content-between" data-user-id="{{ user.id }}" style="cursor: pointer;" {% if user.links %} onClick="load_users_urls({{ user.id }}) {% endif %}">
                     <span>{{ user }}</span>
-                    {% if not user.is_superuser %}
-                        <input id="delete_user_{{ user.id }}" onClick="delete_user({{ user.id }})" type="submit" data-url="{% url 'accounts:users_delete' user.id %}" class="btn btn-sm btn-outline-danger" value="Удалить">
-                    {% endif %}
+                    {% comment %} {% if not user.is_superuser %} {% endcomment %}
+                    <input id="delete_user_{{ user.id }}" onClick="delete_user({{ user.id }})" type="submit" data-url="{% url 'accounts:users_delete' user.id %}" class="btn btn-sm btn-outline-danger" value="Удалить">
+                    {% comment %} {% endif %} {% endcomment %}
                 </li>
             </ul>
 

@@ -62,7 +62,9 @@ function load_users_urls(userId) {
                     linksList.appendChild(linkRow);
                     counter += 1;
                 });
-                tableContainer.classList.add('show');
+                if (!data) {
+                    tableContainer.classList.add('show');
+                }
             });
     }
 }

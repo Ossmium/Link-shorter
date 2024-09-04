@@ -11,7 +11,7 @@ function delete_user(userId) {
         success: async function (response) {
             let html = await (await fetch(location.href)).text();
             let newdoc = new DOMParser().parseFromString(html, 'text/html');
-            document.getElementById('users').outerHTML = newdoc.querySelector('#users').outerHTML;
+            document.getElementById('usersList').outerHTML = newdoc.querySelector('#usersList').outerHTML;
         },
         error: function (response) {
             alert(response.responseJSON.errors);
