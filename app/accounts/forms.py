@@ -39,15 +39,6 @@ class SignUpForm(UserCreationForm):
             }
         ),
     )
-    email = forms.EmailField(
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control mb-2",
-                "id": "floatingEmail",
-                "placeholder": "E-mail",
-            }
-        )
-    )
     password1 = forms.CharField(
         max_length=50,
         widget=forms.PasswordInput(
@@ -71,4 +62,4 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ["username", "email", "password1", "password2"]
+        fields = ["username", "password1", "password2"]
