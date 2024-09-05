@@ -8,10 +8,11 @@ def get_full_url(url):
     if cache.has_key(url):
         Link.objects.filter(short_url=url).update(click_count=F("click_count") + 1)
         return cache.get(url)
-    elif link := Link.objects.filter(short_url=url):
+    link = Link.objects.filter(short_url=url)
+    if link.first():
         link.filter().update(click_count=F("click_count") + 1)
-        cache.set(link[0].short_url, link[0].full_url, timeout=300)
-        return link[0]
+        cache.set(link.first().short_url, link.first().full_url, timeout=300)
+        return link.first()
     raise KeyError("Данный URL не существует, попробуйте другой")
 
 
